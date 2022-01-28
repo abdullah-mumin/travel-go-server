@@ -20,7 +20,6 @@ async function run() {
 
         const database = client.db('travel-go');
         const servicesCollection = database.collection('services');
-        const bookingsCollection = database.collection('booking');
         const usersCollection = database.collection('users');
         const reviewsCollection = database.collection("reviews");
         app.get('/services', async (req, res) => {
@@ -44,13 +43,6 @@ async function run() {
             const updateDoc = { $set: { status: "Approved" } };
             const result = await servicesCollection.updateOne(query, updateDoc);
             res.json(result);
-        })
-
-        // GET BOOKING 
-        app.get('/bookings', async (req, res) => {
-            const cursor = bookingsCollection.find({});
-            const result = await cursor.toArray();
-            res.send(result);
         })
 
         // find all blog by email api
@@ -114,11 +106,6 @@ async function run() {
             res.json(result);
         })
 
-        app.post('/services/booking', async (req, res) => {
-            const booking = req.body;
-            const result = await bookingsCollection.insertOne(booking);
-            res.json(result);
-        })
         app.post("/addSReview", async (req, res) => {
             const result = await reviewCollection.insertOne(req.body);
             res.send(result);
@@ -138,13 +125,6 @@ async function run() {
             res.json(result);
         })
 
-        // DELETE BOOKING
-        app.delete('/bookings/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await bookingsCollection.deleteOne(query);
-            res.json(result);
-        })
     }
     finally {
         //  await client.close();
